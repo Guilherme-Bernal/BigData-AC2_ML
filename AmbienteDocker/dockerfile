@@ -1,28 +1,21 @@
-# Escolhe uma imagem base com Java e Python (necessário para Spark)
 FROM openjdk:11-jre-slim
 
-# Instala Python, pip e dependências básicas
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     curl \
     git \
-    && apt-get clean
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instala Spark manualmente (opcional: você pode deixar o docker-compose puxar já pronto)
 ENV SPARK_VERSION=3.4.1
 RUN curl -L https://downloads.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz | tar xz -C /opt/
 ENV SPARK_HOME=/opt/spark-${SPARK_VERSION}-bin-hadoop3
 ENV PATH=$SPARK_HOME/bin:$PATH
 
-# Instala bibliotecas Python que você usa no notebook
 RUN pip3 install pyspark numpy matplotlib pandas jupyter
 
-# Define diretório de trabalho
 WORKDIR /app
 
-# Exponha portas necessárias (Spark UI e Jupyter)
 EXPOSE 4040 8888
 
-# Comando padrão: iniciar o Jupyter
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--allow-root", "--NotebookApp.token=", "--NotebookApp.password="]
