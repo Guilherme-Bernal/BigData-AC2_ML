@@ -30,7 +30,7 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - ../AnaliseDeDados:/home/jovyan/work
+      - ../DataProcessing:/home/jovyan/work
     environment:
       - PYSPARK_PYTHON=python3
       - SPARK_MASTER=spark://spark-master:7077
